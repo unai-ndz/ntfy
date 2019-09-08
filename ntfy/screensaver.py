@@ -1,5 +1,6 @@
 from shlex import split
 from subprocess import check_output, check_call, CalledProcessError, PIPE
+import os.path
 import sys
 
 # some adapted from
@@ -116,6 +117,14 @@ def macos_is_locked():
 
     return screen_is_locked
 
+customlock_file = os.path.expanduser("~") + '/.cache/is_locked'
+def customlock_detect():
+    return os.path.isfile(customlock_file)
+
+def customlock_is_locked():
+    f = open(customlock_file)
+    content = f.read()
+    return bool(content)
 
 def is_locked():
     if xscreensaver_detect():
@@ -128,4 +137,6 @@ def is_locked():
         return matescreensaver_is_locked()
     if macos_detect():
         return macos_is_locked()
+    if customlock_detect():
+        return customlock_is_locked()
     return True

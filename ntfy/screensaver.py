@@ -124,7 +124,10 @@ def customlock_detect():
 def customlock_is_locked():
     f = open(customlock_file)
     content = f.read()
-    return bool(content)
+    if content == 'true' or content == 'true\n':
+        return True
+    else:
+        return False
 
 def is_locked():
     if xscreensaver_detect():
